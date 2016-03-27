@@ -32,8 +32,6 @@ def midiread(infile):
     return roll
 
 ## write file
-def consecutive(data, stepsize=1):
-    return np.split(data, np.where(np.diff(data) != stepsize)[0]+1)
 
 def midiwrite(roll, outfile, note_length=20, resolution=220, vel=90, pitch_offset=0):
     ticks, ptchs = np.nonzero(roll)

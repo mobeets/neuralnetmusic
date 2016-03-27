@@ -19,8 +19,8 @@ from DeepLearningTutorials.code.rbm import RBM
 from PIL import Image
 
 import myparser
-from _midi.utils import midiwrite
-from midiparser import midiwrite as midiwrite2
+# from _midi.utils import midiwrite
+from midiparser import midiwrite# as midiwrite2
 
 # compute_test_value is 'off' by default, meaning this feature is inactive
 theano.config.compute_test_value = 'off' # Use 'warn' to activate this feature
@@ -555,10 +555,10 @@ class AutoencodingDBN(object):
             firstIm[firstIm > threshold] = 1
             firstIm[firstIm <= threshold] = 0
         if save:
-            midiwrite(path.join(rootLoc, filename), firstIm.T, r=(12, 109), dt=64)
-            print firstIm.T.shape
-            outfile = path.join(rootLoc, filename.replace('.mid', '_2.mid'))
-            midiwrite2(firstIm.T, outfile, pitch_offset=12, resolution=2, note_length=1)
+            # midiwrite(path.join(rootLoc, filename), firstIm.T, r=(12, 109), dt=64)
+            # print firstIm.T.shape
+            outfile = path.join(rootLoc, filename)#.replace('.mid', '_2.mid'))
+            midiwrite(firstIm.T, outfile, pitch_offset=12, resolution=2, note_length=1)
         return firstIm
 
     def label_from_file(self, rootLoc, fileLoc, learn_rate, n_iters, threshold):
@@ -603,14 +603,20 @@ class AutoencodingDBN(object):
         final = result * (1.0 - mask)
         final = final + snippet
         final[final > 0.5] = 1
-        midiwrite(path.join(rootLoc, 'test.midi'), final.T, r=(12, 109), dt=64)
+
+        outfile = path.join(rootLoc, 'test.midi')
+        # midiwrite(path.join(rootLoc, 'test.midi'), final.T, r=(12, 109), dt=64)
+        midiwrite(final.T, outfile, pitch_offset=12, resolution=2, note_length=1)
         return final
 
 def musicxml_to_midi(infile):
     noteReader = myparser.LegatoNoteAdder(64)
     myparser.read(infile, noteReader.handle)
     snippet = noteReader.mtx
-    midiwrite(infile.replace('.xml', '.midi'), snippet.T, r=(12, 109), dt=64)
+
+    outfile = infile.replace('.xml', '.midi')
+    midiwrite(snippet.T, outfile, pitch_offset=12, resolution=2, note_length=1)
+    # midiwrite(infile.replace('.xml', '.midi'), snippet.T, r=(12, 109), dt=64)
 
 def melody_blocker(snippet):
     """
