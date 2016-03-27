@@ -1,4 +1,5 @@
 *.pyc
 .ipynb_checkpoints/
+_old/
 output/
 midifiles/

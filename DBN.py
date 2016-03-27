@@ -19,8 +19,8 @@ from DeepLearningTutorials.code.rbm import RBM
 from PIL import Image
 
 import myparser
-from midi.utils import midiwrite
-
+from _midi.utils import midiwrite
+from midiparser import midiwrite as midiwrite2
 
 # compute_test_value is 'off' by default, meaning this feature is inactive
 theano.config.compute_test_value = 'off' # Use 'warn' to activate this feature
@@ -556,6 +556,9 @@ class AutoencodingDBN(object):
             firstIm[firstIm <= threshold] = 0
         if save:
             midiwrite(path.join(rootLoc, filename), firstIm.T, r=(12, 109), dt=64)
+            print firstIm.T.shape
+            outfile = path.join(rootLoc, filename.replace('.mid', '_2.mid'))
+            midiwrite2(firstIm.T, outfile, pitch_offset=12, resolution=2, note_length=1)
         return firstIm
 
     def label_from_file(self, rootLoc, fileLoc, learn_rate, n_iters, threshold):
@@ -665,7 +668,7 @@ if __name__ == '__main__':
     dbn = load_from_dump('./joplin-model.pickle')
     import sys
     if sys.argv[1] == 'sample':
-        dbn.sample(threshold=0.2)
+        dbn.sample(threshold=0.5)
     elif sys.argv[1] == 'harmonize': 
         dbn.label_from_file('output', sys.argv[2],
             0.01, 500, 0.4)

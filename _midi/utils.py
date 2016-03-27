@@ -63,12 +63,13 @@ def midiwrite(filename, piano_roll, r=(21, 109), dt=32, patch=0):
   midi.patch_change(channel=0, patch=patch)
   t = 0
   samples = [i.nonzero()[0] + r[0] for i in piano_roll]
+  print samples
 
   for i in xrange(len(samples)):
     for f in samples[i]:
-      if (i==0 
-          or f not in samples[i-1]
-          or i%4 == 0):
+      if (i==0 # start
+          or f not in samples[i-1] # wasn't started last time
+          or i%4 == 0): # start of new measure
         midi.update_time(t)
         midi.note_on(channel=0, note=f, velocity=90)
         t = 0
@@ -76,9 +77,9 @@ def midiwrite(filename, piano_roll, r=(21, 109), dt=32, patch=0):
     t += int(dt)
 
     for f in samples[i]:
-      if (i==len(samples)-1 
-          or f not in samples[i+1]
-          or i%4 == 3):
+      if (i==len(samples)-1 # last chance to turn off
+          or f not in samples[i+1] # not on next time
+          or i%4 == 3): # last note of measure
         midi.update_time(t)
         midi.note_off(channel=0, note=f, velocity=0)
         t = 0
