@@ -19,8 +19,7 @@ from DeepLearningTutorials.code.rbm import RBM
 from PIL import Image
 
 import myparser
-# from _midi.utils import midiwrite
-from midiparser import midiwrite# as midiwrite2
+from midiparser import midiread, midiwrite
 
 # compute_test_value is 'off' by default, meaning this feature is inactive
 theano.config.compute_test_value = 'off' # Use 'warn' to activate this feature
@@ -555,13 +554,11 @@ class AutoencodingDBN(object):
             firstIm[firstIm > threshold] = 1
             firstIm[firstIm <= threshold] = 0
         if save:
-            # midiwrite(path.join(rootLoc, filename), firstIm.T, r=(12, 109), dt=64)
-            # print firstIm.T.shape
-            outfile = path.join(rootLoc, filename)#.replace('.mid', '_2.mid'))
-            midiwrite(firstIm.T, outfile, pitch_offset=12, resolution=2, note_length=1)
+            outfile = path.join(rootLoc, filename)
+            midiwrite(firstIm.T, outfile, pitch_offset=12, resolution=2)
         return firstIm
 
-    def label_from_file(self, rootLoc, fileLoc, learn_rate, n_iters, threshold):
+    def label_from_file(self, rootLoc, fileLoc, learn_rate, n_iters, threshold, outfile='harmonized.midi'):
         """
         Given a xml file at fileLoc, harmonizes the melody in the xml file, by
         doing gradient descent on the top hidden layer of the network.  This
@@ -569,9 +566,15 @@ class AutoencodingDBN(object):
         the melody. We then run the network forwards to get the entire harmony
         from the top level activations that we estimate.
         """
-        noteReader = myparser.LegatoNoteAdder(64)
-        myparser.read(fileLoc, noteReader.handle)
-        snippet = noteReader.mtx
+        if '.xml' in fileLoc:
+            noteReader = myparser.LegatoNoteAdder(64)
+            myparser.read(fileLoc, noteReader.handle)
+            snippet = noteReader.mtx
+            print snippet.shape
+        else:
+            snippet = midiread(fileLoc, desired_resolution=2).T
+            if snippet.shape[1] > 64:
+                snippet = snippet[:,:64]
         mask = melody_blocker(snippet)
 
         linear_snippet = snippet.reshape([88*64])
@@ -604,9 +607,8 @@ class AutoencodingDBN(object):
         final = final + snippet
         final[final > 0.5] = 1
 
-        outfile = path.join(rootLoc, 'test.midi')
-        # midiwrite(path.join(rootLoc, 'test.midi'), final.T, r=(12, 109), dt=64)
-        midiwrite(final.T, outfile, pitch_offset=12, resolution=2, note_length=1)
+        outfile = path.join(rootLoc, outfile)
+        midiwrite(final.T, outfile, pitch_offset=12, resolution=2)
         return final
 
 def musicxml_to_midi(infile):
@@ -615,8 +617,7 @@ def musicxml_to_midi(infile):
     snippet = noteReader.mtx
 
     outfile = infile.replace('.xml', '.midi')
-    midiwrite(snippet.T, outfile, pitch_offset=12, resolution=2, note_length=1)
-    # midiwrite(infile.replace('.xml', '.midi'), snippet.T, r=(12, 109), dt=64)
+    midiwrite(snippet.T, outfile, pitch_offset=12, resolution=2)
 
 def melody_blocker(snippet):
     """
@@ -674,7 +675,12 @@ if __name__ == '__main__':
     dbn = load_from_dump('./joplin-model.pickle')
     import sys
     if sys.argv[1] == 'sample':
-        dbn.sample(threshold=0.5)
+        top_level_size = dbn.layer_sizes[-1]
+        top_level = 0.25*numpy.ones([10, top_level_size])
+        top_level[0,4] += 0.05
+        # top_level *= 1.2
+        top_level = top_level.astype(dtype=NUMPY_DTYPE)
+        dbn.sample(threshold=0.5, top_level=top_level, filename='test2.midi')
     elif sys.argv[1] == 'harmonize': 
         dbn.label_from_file('output', sys.argv[2],
             0.01, 500, 0.4)
