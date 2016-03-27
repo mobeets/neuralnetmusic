@@ -531,7 +531,7 @@ class AutoencodingDBN(object):
                                                   / 60.))
         self.dump_params('./my-model.pickle')
 
-    def sample(self, top_level=None, rootLoc='./', save=True, threshold=0.5,
+    def sample(self, top_level=None, rootLoc='./output', save=True, threshold=0.5,
             filename='test.midi'):
         """
         Generates a sample from the trained neural net.  top_level is a 10 x
@@ -541,7 +541,9 @@ class AutoencodingDBN(object):
         """
         if top_level is None:
             top_level_size = self.layer_sizes[-1]
-            top_level = numpy.random.randint(2, size=[10, top_level_size])\
+            # top_level = numpy.random.randint(2, size=[10, top_level_size])\
+            #     .astype(dtype=NUMPY_DTYPE)
+            top_level = numpy.random.rand(10, top_level_size)\
                 .astype(dtype=NUMPY_DTYPE)
         output = self.generate(top_level)
         output = output.reshape([10, 88*64])
@@ -601,6 +603,12 @@ class AutoencodingDBN(object):
         midiwrite(path.join(rootLoc, 'test.midi'), final.T, r=(12, 109), dt=64)
         return final
 
+def musicxml_to_midi(infile):
+    noteReader = myparser.LegatoNoteAdder(64)
+    myparser.read(infile, noteReader.handle)
+    snippet = noteReader.mtx
+    midiwrite(infile.replace('.xml', '.midi'), snippet.T, r=(12, 109), dt=64)
+
 def melody_blocker(snippet):
     """
     Makes a mask where anything above the top line of the snippet is 1.  Also
@@ -657,9 +665,11 @@ if __name__ == '__main__':
     dbn = load_from_dump('./joplin-model.pickle')
     import sys
     if sys.argv[1] == 'sample':
-        dbn.sample(threshold=0.5)
+        dbn.sample(threshold=0.2)
     elif sys.argv[1] == 'harmonize': 
-        dbn.label_from_file(path.dirname(sys.argv[0]), './12-days.xml',
+        dbn.label_from_file('output', sys.argv[2],
             0.01, 500, 0.4)
+    elif sys.argv[1] == 'xmltomidi':
+        musicxml_to_midi(sys.argv[2])
     else:
         print "invalid command"
