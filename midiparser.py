@@ -19,13 +19,32 @@ def get_empty_roll(pattern):
     # print maxlen, maxptch
     return np.zeros((maxlen+1, NUM_KEYS))
 
-def midiread(infile, dt=1, desired_resolution=None):
+def midiread_sniff(infile):
+    pattern = midi.read_midifile(infile)
+    print pattern.resolution
+    print pattern[1]
+    for track in pattern:
+        print '---------------'
+        print 'NEW TRACK'
+        print '---------------'
+        track.make_ticks_abs()
+        for event in track:
+            if isinstance(event, midi.TrackNameEvent):
+                print event.text
+            if isinstance(event, midi.ProgramChangeEvent) or isinstance(event, midi.ProgramNameEvent):
+                print event
+
+def midiread(infile, dt=1, desired_resolution=None, matching_track_text=None):
     pattern = midi.read_midifile(infile)
     if desired_resolution is not None:
         dt = pattern.resolution/desired_resolution
-    # pattern = [pattern[1]] # just one track
+    # print pattern[:2]
     rolls = get_empty_roll(pattern)
     for track in pattern:
+        if matching_track_text: # track must have meta text to be included
+            keep_track = False
+        else:
+            keep_track = True
         roll = get_empty_roll(pattern)
         track.make_ticks_abs()
         for event in track:
@@ -39,7 +58,11 @@ def midiread(infile, dt=1, desired_resolution=None):
                         continue
                     note_on = np.where(roll[:note_off, event.get_pitch()] == 1)[0][-1]
                     roll[note_on:note_off+1, event.get_pitch()] = 1
-        rolls += roll
+            elif matching_track_text and isinstance(event, midi.TrackNameEvent):
+                if matching_track_text.lower() == event.text.lower():
+                    keep_track = True
+        if keep_track:
+            rolls += roll
     return rolls
 
 # def midiread2(infile):
@@ -47,13 +70,16 @@ def midiread(infile, dt=1, desired_resolution=None):
 
 ## write file
 
-def midiwrite(roll, outfile, resolution=220, vel=127, pitch_offset=0):
+def midiwrite(roll, outfile, resolution=220, vel=127, pitch_offset=0, patch_num=None):
     ticks, ptchs = np.nonzero(roll)
     ix = np.argsort(ticks) # must enter in chronological order, whether on or off
 
     pattern = midi.Pattern(resolution=resolution)
     track = midi.Track()
     pattern.append(track)
+    if patch_num is not None:
+        patch = midi.ProgramChangeEvent(tick=0, channel=0, data=[patch_num])
+        track.append(patch)
 
     last_tick = 0
     for tick, ptch in zip(ticks[ix], ptchs[ix]):
