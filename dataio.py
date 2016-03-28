@@ -1,4 +1,10 @@
+import os.path
+import glob
 import numpy as np
+import midiparser
+
+RESOLUTION = 2
+TRAIN_DIR = 'midifiles/train/*.mid'
 NUM_KEYS = 88
 
 def blockwise_view(a, blockshape, require_aligned_blocks=True):
@@ -38,7 +44,7 @@ def blockwise_view(a, blockshape, require_aligned_blocks=True):
                                               shape=view_shape, 
                                               strides=(inter_block_strides+intra_block_strides))
 
-def make_training_data(train_dir='midifiles/train/*.mid', max_len=64, resolution=RESOLUTION):
+def make_training_data(train_dir=TRAIN_DIR, max_len=64, resolution=RESOLUTION):
     """
     returns np.array with shape (nrows, NUM_KEYS*max_len)
         where each row is an num_keys-by-pitch matrix respresenting 4 bars of a midi file
@@ -54,3 +60,10 @@ def make_training_data(train_dir='midifiles/train/*.mid', max_len=64, resolution
     ds1 = np.reshape(ds, (ds.shape[0], NUM_KEYS*max_len)) # (nrows, 88*max_len)
     assert np.all(ds1[1,:].reshape([88, 64]) == ds[1,:])
     return ds1
+
+def track_list(train_dir=TRAIN_DIR, match_name_fcn=None):
+    train_files = glob.glob(os.path.abspath(train_dir))
+    for infile in train_files:
+        print infile
+        midiparser.midiread_tracks(infile, match_name_fcn)
+        print '------------'

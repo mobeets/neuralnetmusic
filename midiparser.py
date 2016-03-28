@@ -19,14 +19,20 @@ def get_empty_roll(pattern):
     # print maxlen, maxptch
     return np.zeros((maxlen+1, NUM_KEYS))
 
+def midiread_tracks(infile, match_name_fcn=None):
+    if match_name_fcn is None:
+        match_name_fcn = lambda x: True
+    pattern = midi.read_midifile(infile)
+    for track in pattern:
+        for event in track:
+            if isinstance(event, midi.TrackNameEvent) and match_name_fcn(event.text):
+                print event.text
+    
 def midiread_sniff(infile):
     pattern = midi.read_midifile(infile)
     print pattern.resolution
     # print pattern[1]
     for track in pattern:
-        print '---------------'
-        print 'NEW TRACK'
-        print '---------------'
         track.make_ticks_abs()
         for event in track:
             if isinstance(event, midi.TrackNameEvent):
