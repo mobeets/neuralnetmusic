@@ -22,7 +22,7 @@ def get_empty_roll(pattern):
 def midiread_sniff(infile):
     pattern = midi.read_midifile(infile)
     print pattern.resolution
-    print pattern[1]
+    # print pattern[1]
     for track in pattern:
         print '---------------'
         print 'NEW TRACK'
@@ -34,35 +34,41 @@ def midiread_sniff(infile):
             if isinstance(event, midi.ProgramChangeEvent) or isinstance(event, midi.ProgramNameEvent):
                 print event
 
-def midiread(infile, dt=1, desired_resolution=None, matching_track_text=None):
+def midiread(infile, dt=1, desired_resolution=None, match_name=None, sum_rolls=True):
+    """
+    warning: dt > 1 might lead to missing notes,
+        which might in turn lead to never turning notes off
+    """
     pattern = midi.read_midifile(infile)
     if desired_resolution is not None:
         dt = pattern.resolution/desired_resolution
-    # print pattern[:2]
-    rolls = get_empty_roll(pattern)
+    rolls = get_empty_roll(pattern) if sum_rolls else []
+    c = 0
     for track in pattern:
-        if matching_track_text: # track must have meta text to be included
-            keep_track = False
-        else:
-            keep_track = True
+        # track must have meta text to be included
+        keep_track = False if match_name else True
         roll = get_empty_roll(pattern)
         track.make_ticks_abs()
         for event in track:
             if isinstance(event, midi.NoteEvent):
-                if event.get_velocity() > 0: # note onset
-                    # print event.tick, event.length, event.get_velocity(), event.get_pitch() 
+                # note onset is either a NoteOnEvent with zero velocity, or a NoteOffEvent
+                if event.get_velocity() > 0 and not isinstance(event, midi.NoteOffEvent):
                     roll[int(event.tick/dt), event.get_pitch()] = 1
-                else: # note off
+                # note offset
+                else:
                     note_off = int(event.tick/dt)
                     if roll[note_off, event.get_pitch()] == 1:
                         continue
                     note_on = np.where(roll[:note_off, event.get_pitch()] == 1)[0][-1]
                     roll[note_on:note_off+1, event.get_pitch()] = 1
-            elif matching_track_text and isinstance(event, midi.TrackNameEvent):
-                if matching_track_text.lower() == event.text.lower():
+            elif match_name and isinstance(event, midi.TrackNameEvent):
+                if match_name.lower() == event.text.lower():
                     keep_track = True
         if keep_track:
-            rolls += roll
+            if sum_rolls:
+                rolls += roll
+            else:
+                rolls.append(roll)
     return rolls
 
 # def midiread2(infile):
@@ -74,6 +80,7 @@ def midiwrite(roll, outfile, resolution=220, vel=127, pitch_offset=0, patch_num=
     ticks, ptchs = np.nonzero(roll)
     ix = np.argsort(ticks) # must enter in chronological order, whether on or off
 
+    c = 0
     pattern = midi.Pattern(resolution=resolution)
     track = midi.Track()
     pattern.append(track)
@@ -91,7 +98,7 @@ def midiwrite(roll, outfile, resolution=220, vel=127, pitch_offset=0, patch_num=
             on = midi.NoteOnEvent(tick=(tick-last_tick), velocity=vel, pitch=ptch)
             track.append(on)
             last_tick = tick
-        elif not played_next:# or tick%4 == 3:
+        if not played_next:# or tick%4 == 3:
             off = midi.NoteOffEvent(tick=(tick-last_tick), pitch=ptch)
             track.append(off)
             last_tick = tick
