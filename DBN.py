@@ -431,7 +431,7 @@ class AutoencodingDBN(object):
         # If you'd like to try out different parameters for the fine-tuner only,
         # you can cache the initial model state, so you don't have to pre-train
         # every time.
-        cPickle.dump(self, open('initial-model.pickle', 'wb'), protocol=cPickle.HIGHEST_PROTOCOL)
+        cPickle.dump(self, open('output/initial-model.pickle', 'wb'), protocol=cPickle.HIGHEST_PROTOCOL)
         ########################
         # FINETUNING THE MODEL #
         ########################
@@ -528,9 +528,9 @@ class AutoencodingDBN(object):
                               os.path.split(__file__)[1] +
                               ' ran for %.2fm' % ((end_time - start_time)
                                                   / 60.))
-        self.dump_params('./my-model.pickle')
+        self.dump_params('output/my-model.pickle')
 
-    def sample(self, top_level=None, rootLoc='./output', save=True, threshold=0.5,
+    def sample(self, top_level=None, rootLoc='output', save=True, threshold=0.5,
             filename='test.midi'):
         """
         Generates a sample from the trained neural net.  top_level is a 10 x
@@ -555,7 +555,7 @@ class AutoencodingDBN(object):
             firstIm[firstIm <= threshold] = 0
         if save:
             outfile = path.join(rootLoc, filename)
-            midiwrite(firstIm.T, outfile, pitch_offset=12, resolution=2)
+            midiwrite(firstIm.T, outfile, pitch_offset=0, resolution=2, patch_num=47) # pitch_offset=12
         return firstIm
 
     def label_from_file(self, rootLoc, fileLoc, learn_rate, n_iters, threshold, outfile='harmonized.midi'):
@@ -608,7 +608,7 @@ class AutoencodingDBN(object):
         final[final > 0.5] = 1
 
         outfile = path.join(rootLoc, outfile)
-        midiwrite(final.T, outfile, pitch_offset=12, resolution=2)
+        midiwrite(final.T, outfile, pitch_offset=0, resolution=2, patch_num=82) # pitch_offset=12
         return final
 
 def musicxml_to_midi(infile):
@@ -670,17 +670,18 @@ if __name__ == '__main__':
         dbn = AutoencodingDBN(numpy_rng=numpy.random.RandomState(),
             n_ins=88*64,
             hidden_layers_sizes=[1024, 256, 64])
-        dbn.train_dbn('./joplin-data.pickle')
+        dbn.train_dbn(sys.argv[2])
         exit()
-    dbn = load_from_dump('./joplin-model.pickle')
+    # dbn = load_from_dump('output/joplin-model.pickle')
+    dbn = load_from_dump('output/metallica_gtr-model.pickle')
     import sys
     if sys.argv[1] == 'sample':
-        top_level_size = dbn.layer_sizes[-1]
-        top_level = 0.25*numpy.ones([10, top_level_size])
-        top_level[0,4] += 0.05
+        # top_level_size = dbn.layer_sizes[-1]
+        # top_level = 0.25*numpy.ones([10, top_level_size])
+        # top_level[0,4] += 0.05
         # top_level *= 1.2
-        top_level = top_level.astype(dtype=NUMPY_DTYPE)
-        dbn.sample(threshold=0.5, top_level=top_level, filename='test2.midi')
+        # top_level = top_level.astype(dtype=NUMPY_DTYPE)
+        dbn.sample(threshold=0.1, filename='test2.midi')
     elif sys.argv[1] == 'harmonize': 
         dbn.label_from_file('output', sys.argv[2],
             0.01, 500, 0.4)

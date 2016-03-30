@@ -40,11 +40,16 @@ def midiread_sniff(infile):
             if isinstance(event, midi.ProgramChangeEvent) or isinstance(event, midi.ProgramNameEvent):
                 print event
 
-def midiread(infile, dt=1, desired_resolution=None, match_name=None, sum_rolls=True):
+def midiread(infile, dt=1, desired_resolution=None, match_name_fcn=None, sum_rolls=True):
     """
     warning: dt > 1 might lead to missing notes,
         which might in turn lead to never turning notes off
     """
+    if match_name_fcn is None:
+        match_name_fcn = lambda x: True
+        match_name = False
+    else:
+        match_name = True
     pattern = midi.read_midifile(infile)
     if desired_resolution is not None:
         dt = pattern.resolution/desired_resolution
@@ -58,6 +63,9 @@ def midiread(infile, dt=1, desired_resolution=None, match_name=None, sum_rolls=T
         for event in track:
             if isinstance(event, midi.NoteEvent):
                 # note onset is either a NoteOnEvent with zero velocity, or a NoteOffEvent
+                if event.get_pitch() >= NUM_KEYS or event.get_pitch() < 0:
+                    print "WARNING: found pitch out of range: " + str(event.get_pitch())
+                    continue
                 if event.get_velocity() > 0 and not isinstance(event, midi.NoteOffEvent):
                     roll[int(event.tick/dt), event.get_pitch()] = 1
                 # note offset
@@ -65,10 +73,14 @@ def midiread(infile, dt=1, desired_resolution=None, match_name=None, sum_rolls=T
                     note_off = int(event.tick/dt)
                     if roll[note_off, event.get_pitch()] == 1:
                         continue
-                    note_on = np.where(roll[:note_off, event.get_pitch()] == 1)[0][-1]
+                    note_ons = np.where(roll[:note_off, event.get_pitch()] == 1)[0]
+                    if len(note_ons) == 0:
+                        print "WARNING: No previous note onset found."
+                        continue
+                    note_on = note_ons[-1]
                     roll[note_on:note_off+1, event.get_pitch()] = 1
             elif match_name and isinstance(event, midi.TrackNameEvent):
-                if match_name.lower() == event.text.lower():
+                if match_name_fcn(event.text):
                     keep_track = True
         if keep_track:
             if sum_rolls:

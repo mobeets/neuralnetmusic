@@ -1,0 +1,120 @@
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_(Anesthesia)_-_Pulling_Teeth.mid
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Battery.mid
+Acous Gtr 1
+Acous Gtr 2&3
+Acous Gtr 4
+Elec Gtr 1
+Elec Gtr 2&3
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Blackened.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar 4
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Fade_To_Black.mid
+Acoustic Guitar
+Guitar 1
+Guitar 2
+Guitar 3
+Lead Guitar
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Fight_Fire_With_Fire.mid
+Clean Guitar 1
+Clean Guitar 2
+Clean Guitar 3
+Distortion Guitar 1
+Distortion Guitar 3
+Distortion Guitar 2
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_For_Whom_The_Bell_Tolls.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar 4
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Hit_The_Lights.mid
+Guitar 1
+Guitar 2
+Guitar 3
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Master_Of_Puppets.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar Solo 
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Metal_Militia.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Bass Guitar
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Motorbreath.mid
+Guitar 1
+Guitar 2
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_No_Remorse.mid
+Guitar 1
+Guitar 2
+Guitar 3
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_One.mid
+Gtr. I
+Gtr. II
+Ac.Gtr. I
+Ac.Gtr. I
+Ds.Gtr.I
+Ds.Gtr.II
+Ds.Gtr.II
+Ds.Gtr.IV
+Guitar solo to have
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Orion.mid
+Guitar 1
+Guitar 2
+Guitar 3
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Phantom_Lord.mid
+Guitar 1
+Guitar 2
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Ride_The_Lightning.mid
+Guitar 1
+Guitar 2
+Guitar 3
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Seek_and_Destroy.mid
+Guitar 1
+Guitar 2
+Guitar Solo
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_The_Call_Of_Ktulu.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar 4
+Guitar 5
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_The_Four_Horsemen.mid
+Guitar 1
+Guitar 2
+Guitar 3
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_The_Thing_That_Should_Not_Be.mid
+Guitar 1
+Lead Guitar
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Welcome_Home_(Sanitarium).mid
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar 4
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Whiplash.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Bass Guitar
+------------

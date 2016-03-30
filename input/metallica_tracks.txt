@@ -1,0 +1,290 @@
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_(Anesthesia)_-_Pulling_Teeth.mid
+Staff 1
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Battery.mid
+Acous Gtr 1
+Acous Gtr 2&3
+Acous Gtr 4
+Elec Gtr 1
+Elec Gtr 2&3
+Solo 1
+Bass
+Solo 2
+bass drum
+snare
+hihat
+toms
+cymbals
+Melody Line
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Blackened.mid
+Vocals
+Back Vocals
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar 4
+Bass
+Drums
+ 
+Blackened
+by Metallica
+ 
+Transcribed by
+King Diamond
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Fade_To_Black.mid
+Voice
+Acoustic Guitar
+Guitar 1
+Guitar 2
+Guitar 3
+Lead Guitar
+Drums
+Bass
+ 
+Fade To Black
+by Metallica
+ 
+Transcribed by
+King Diamond
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Fight_Fire_With_Fire.mid
+Vocals
+Clean Guitar 1
+Clean Guitar 2
+Clean Guitar 3
+Distortion Guitar 1
+Distortion Guitar 3
+Distortion Guitar 2
+Bass
+Drums
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_For_Whom_The_Bell_Tolls.mid
+Vocals
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar 4
+Bass 1
+Bass 2
+Bells
+Drums
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Hit_The_Lights.mid
+Vocals
+Guitar 1
+Guitar 2
+Guitar 3
+Bass
+Drums
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Master_Of_Puppets.mid
+Master of Puppets - Metallica
+ 
+Vocals (left)
+Vocals (right)
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar Solo 
+Bass (left)
+Bass (right)
+Drums
+ 
+=================
+Sequenced: King Diamond  (?)
+Arranged: GS, wave/synth
+Song: Master of Puppets
+Group: Metallica
+Album: Master of the Puppets
+Release: 1986
+Rearranged: Mark Johnson
+For: GS, Roland SCB-55
+E-mail: 102334.12@compuserve.com
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Metal_Militia.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Bass Guitar
+Drums
+Vocals
+Metal Militia
+By Metallica
+Transcribed by
+Andrew Hill
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Motorbreath.mid
+Vocals
+Guitar 1
+Guitar 2
+Bass
+Drums
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_No_Remorse.mid
+Vocals
+Guitar 1
+Guitar 2
+Guitar 3
+Bass
+Drums
+Fret Noise
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_One.mid
+Gtr. I
+Gtr. II
+Ac.Gtr. I
+Ac.Gtr. I
+Ds.Gtr.I
+Ds.Gtr.II
+Ds.Gtr.II
+Ds.Gtr.IV
+Bass
+Drums
+Solo fill track
+Solo fill track
+Solo fill track
+Solo fill track
+This song was
+Originally DL'd
+From AOL
+I modified the lead
+Guitar solo to have
+A bit more oomf
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Orion.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Bass
+Drums
+ 
+Orion
+by Metallica
+ 
+Transcribed by
+King Diamond
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Phantom_Lord.mid
+Vocals
+Guitar 1
+Guitar 2
+Bass
+Drums
+Synth
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Ride_The_Lightning.mid
+Vocals
+Guitar 1
+Guitar 2
+Guitar 3
+Bass
+Drums
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Seek_and_Destroy.mid
+Voice
+Guitar 1
+Guitar 2
+Guitar Solo
+Bass
+Drums
+ 
+Seek & Destroy
+by Metallica
+ 
+Transcribed by
+King Diamond
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_The_Call_Of_Ktulu.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar 4
+Guitar 5
+Bass
+Drums
+ 
+The Call of Ktulu
+by Metallica
+ 
+Transcribed by
+King Diamond
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_The_Four_Horsemen.mid
+Voice
+Guitar 1
+Guitar 2
+Guitar 3
+Bass
+Drums
+ 
+The Four Horsemen
+by Metallica
+ 
+Transcribed by
+King Diamond
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_The_Thing_That_Should_Not_Be.mid
+Vocals
+Guitar 1
+Lead Guitar
+Bass
+Drums
+ 
+The Thing That
+Should Not Be
+by Metallica
+ 
+Transcribed by 
+King Diamond
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Welcome_Home_(Sanitarium).mid
+Voice
+Guitar 1
+Guitar 2
+Guitar 3
+Guitar 4
+Bass
+Drums
+ 
+Welcome Home (Sanatarium)
+by Metallica
+ 
+Transcribed by
+King Diamond
+------------
+------------
+/Users/mobeets/code/neuralnetmusic/midifiles/metallica/Metallica_-_Whiplash.mid
+Guitar 1
+Guitar 2
+Guitar 3
+Bass Guitar
+Vocals
+Drums
+Whiplash
+By Metallica
+Transcribed by
+Andrew Hill
+andrew@g0niz.demon.co.uk
+------------
+------------
