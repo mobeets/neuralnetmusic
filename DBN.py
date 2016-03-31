@@ -13,8 +13,8 @@ import theano
 import theano.tensor as T
 from theano.tensor.shared_randomstreams import RandomStreams
 
-from DeepLearningTutorials.code.mlp import HiddenLayer
-from DeepLearningTutorials.code.rbm import RBM
+from DLT.mlp import HiddenLayer
+from DLT.rbm import RBM
 
 from PIL import Image
 
