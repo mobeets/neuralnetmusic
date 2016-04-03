@@ -366,6 +366,17 @@ class AutoencodingDBN(object):
         )
         return generator()
 
+    def latents(self, bottom_level):
+        """
+        Compute the latent vector for a given input
+        """
+        latentator = theano.function(
+            inputs=[],
+            outputs=self.sigmoid_layers[-1].output,
+            givens={ self.x: bottom_level }
+        )
+        return latentator()
+
     def label(self, to_label, x_mask, learning_rate):
         """
         Estimate top layer, given an incomplete layer 1.
@@ -490,8 +501,9 @@ class AutoencodingDBN(object):
                     validation_losses = test_model()
                     this_validation_loss = numpy.mean(validation_losses)
                     print(
-                        'epoch %i, minibatch %i/%i, validation error %f %%'
+                        'iter %i, epoch %i, minibatch %i/%i, validation error %f %%'
                         % (
+                            iter,
                             epoch,
                             minibatch_index + 1,
                             n_train_batches,
@@ -507,16 +519,23 @@ class AutoencodingDBN(object):
                             this_validation_loss < best_validation_loss *
                             improvement_threshold
                         ):
+                            patience_old = patience
                             patience = max(patience, iter * patience_increase)
+                            if patience != patience_old:
+                                print 'updating patience from {0} to {1} (iter={2})'.format(patience_old, patience, iter)
 
                         # save best validation score and iteration number
                         best_validation_loss = this_validation_loss
                         best_iter = iter
 
                 if patience <= iter:
+                    print '-------'
+                    print 'done because patience <= iter'
                     done_looping = True
                     break
 
+        # metallica_gtr: 10 1000 53 54 538.0 2.0 538
+        print epoch, training_epochs, minibatch_index+1, n_train_batches, patience, patience_increase, iter
         end_time = time.clock()
         print(
             (
@@ -540,10 +559,10 @@ class AutoencodingDBN(object):
         """
         if top_level is None:
             top_level_size = self.layer_sizes[-1]
-            # top_level = numpy.random.randint(2, size=[10, top_level_size])\
-            #     .astype(dtype=NUMPY_DTYPE)
-            top_level = numpy.random.rand(10, top_level_size)\
+            top_level = numpy.random.randint(2, size=[10, top_level_size])\
                 .astype(dtype=NUMPY_DTYPE)
+            # top_level = numpy.random.rand(10, top_level_size)\
+            #     .astype(dtype=NUMPY_DTYPE)
         output = self.generate(top_level)
         output = output.reshape([10, 88*64])
         firstIm = output[0, :].reshape([88, 64])
@@ -555,7 +574,7 @@ class AutoencodingDBN(object):
             firstIm[firstIm <= threshold] = 0
         if save:
             outfile = path.join(rootLoc, filename)
-            midiwrite(firstIm.T, outfile, pitch_offset=0, resolution=2, patch_num=47) # pitch_offset=12
+            midiwrite(firstIm.T, outfile, pitch_offset=0, resolution=2, patch_num=82) # pitch_offset=12
         return firstIm
 
     def label_from_file(self, rootLoc, fileLoc, learn_rate, n_iters, threshold, outfile='harmonized.midi'):
@@ -681,7 +700,7 @@ if __name__ == '__main__':
         # top_level[0,4] += 0.05
         # top_level *= 1.2
         # top_level = top_level.astype(dtype=NUMPY_DTYPE)
-        dbn.sample(threshold=0.1, filename='test2.midi')
+        dbn.sample(threshold=0.5, filename='test2.midi')
     elif sys.argv[1] == 'harmonize': 
         dbn.label_from_file('output', sys.argv[2],
             0.01, 500, 0.4)

@@ -1,7 +1,9 @@
 import os.path
 import glob
+import cPickle
 import numpy as np
 import midiparser
+import DBN
 
 RESOLUTION = 2
 TRAIN_DIR = 'midifiles/train'
@@ -44,17 +46,23 @@ def blockwise_view(a, blockshape, require_aligned_blocks=True):
                                               shape=view_shape, 
                                               strides=(inter_block_strides+intra_block_strides))
 
-def make_training_data(train_dir=TRAIN_DIR, max_len=64, resolution=RESOLUTION):
+def make_training_data(train_dir=TRAIN_DIR, max_len=64, resolution=RESOLUTION, inter_outdir=None):
     """
     returns np.array with shape (nrows, NUM_KEYS*max_len)
         where each row is an num_keys-by-pitch matrix respresenting 4 bars of a midi file
     """
     train_files = glob.glob(os.path.join(train_dir, '*.mid'))
     ds = []
+    c = 0
     for infile in train_files:
         m = midiparser.midiread(infile, desired_resolution=resolution)
         s = blockwise_view(m, (max_len, NUM_KEYS), require_aligned_blocks=False)[:,0]
-        print s.shape
+        print infile, s.shape
+        if inter_outdir is not None:
+            for i in xrange(s.shape[0]):
+                outfile = os.path.join(inter_outdir, str(i + c) + '.mid')
+                midiparser.midiwrite(s[i,:,:], outfile, resolution=resolution, patch_num=82)
+        c += s.shape[0]
         ds.append(s)
     ds = np.vstack(ds)
     ds = np.swapaxes(ds, 1, 2) # (nrows, 88, max_len)
@@ -80,16 +88,43 @@ def track_list(train_dir=TRAIN_DIR, match_name_fcn=None):
         midiparser.midiread_tracks(infile, match_name_fcn)
         print '------------'
 
+def reconstruct(mdlfile='output/metallica_gtr-model.pickle', datfile='input/metallica_gtr-data.pickle', ind=None):
+    # load data and model
+    dbn = DBN.load_from_dump(mdlfile)
+    raw_x = cPickle.load(open(datfile, 'rb')).astype(dtype=DBN.NUMPY_DTYPE)
+
+    # choose input data
+    if ind is not None:
+        inp = raw_x[ind,:].reshape(1, raw_x.shape[1])
+
+        # find latents, then sample from latents to reconstruct
+        out = dbn.latents(inp)
+        outs = np.tile(out, (10,1))
+        out_p = dbn.sample(outs, threshold=0.0)
+
+        # write input and its reconstruction
+        outfile = 'output/test_inp.midi'
+        midiparser.midiwrite(inp.reshape(88, 64).T, outfile, resolution=2, patch_num=82)
+        outfile = 'output/test_out.midi'
+        midiparser.midiwrite(out_p.T, outfile, resolution=2, patch_num=82)
+
+    else:
+        latents = []
+        for ind in xrange(raw_x.shape[0]):
+            inp = raw_x[ind,:].reshape(1, raw_x.shape[1])
+            out = dbn.latents(inp)
+            latents.append(out)
+        return latents
+
 if __name__ == '__main__':
-    pretrain_dir = 'midifiles/metallica'
-    outdir = 'midifiles/metallica_gtr'
-    outfile = 'midifiles/metallica_gtr-data.pickle'
+    pretrain_dir = 'input/metallica'
+    outdir = 'input/metallica_gtr'
+    outfile = 'input/metallica_gtr-data.pickle'
     # save_training_data(pretrain_dir, outdir)
-    my_obj = make_training_data(train_dir=outdir, max_len=64)
+    my_obj = make_training_data(train_dir=outdir, max_len=64, inter_outdir='input/tmp')
     
-    import cPickle
-    print cPickle.load(open('./joplin-data.pickle', 'rb')).astype(dtype=np.float64).shape
+    print cPickle.load(open('input/joplin-data.pickle', 'rb')).astype(dtype=np.float64).shape
     print my_obj.shape
-    with open(outfile, 'wb') as f:
-        cPickle.dump(my_obj, f, protocol=cPickle.HIGHEST_PROTOCOL)
+    # with open(outfile, 'wb') as f:
+    #     cPickle.dump(my_obj, f, protocol=cPickle.HIGHEST_PROTOCOL)
     print cPickle.load(open(outfile)).astype(dtype=np.float64).shape
