@@ -55,7 +55,7 @@ def midiread(infile, dt=1, desired_resolution=None, match_name_fcn=None, sum_rol
     pattern = midi.read_midifile(infile)
     if desired_resolution is not None:
         dt = pattern.resolution/desired_resolution
-    rolls = get_empty_roll(pattern) if sum_rolls else []
+    rolls = []
     c = 0
     for track in pattern:
         # track must have meta text to be included
@@ -85,10 +85,9 @@ def midiread(infile, dt=1, desired_resolution=None, match_name_fcn=None, sum_rol
                 if match_name_fcn(event.text):
                     keep_track = True
         if keep_track:
-            if sum_rolls:
-                rolls += roll
-            else:
-                rolls.append(roll)
+            rolls.append(roll)
+    if sum_rolls:
+        rolls = np.dstack(rolls).sum(axis=2)
     return rolls
 
 ## write file

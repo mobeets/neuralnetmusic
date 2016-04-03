@@ -574,7 +574,7 @@ class AutoencodingDBN(object):
             firstIm[firstIm <= threshold] = 0
         if save:
             outfile = path.join(rootLoc, filename)
-            midiwrite(firstIm.T, outfile, pitch_offset=0, resolution=2, patch_num=82) # pitch_offset=12
+            midiwrite(firstIm.T, outfile, pitch_offset=0, resolution=2, patch_nums=82) # pitch_offset=12
         return firstIm
 
     def label_from_file(self, rootLoc, fileLoc, learn_rate, n_iters, threshold, outfile='harmonized.midi'):
@@ -627,7 +627,7 @@ class AutoencodingDBN(object):
         final[final > 0.5] = 1
 
         outfile = path.join(rootLoc, outfile)
-        midiwrite(final.T, outfile, pitch_offset=0, resolution=2, patch_num=82) # pitch_offset=12
+        midiwrite(final.T, outfile, pitch_offset=0, resolution=2, patch_nums=82) # pitch_offset=12
         return final
 
 def musicxml_to_midi(infile):
